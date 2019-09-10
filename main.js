@@ -25,10 +25,26 @@ const setRender = str => {
     const needChange = [".left", ".tag", ".name"]
     if (str === '') str = "-"
     needChange.forEach(sel => {
-        S(sel).innerText = str.substr(0,6)
+        S(sel).innerText = str.substr(0, 6)
     })
     S(".pop").innerText = str
     textFit(document.getElementsByClassName('left'), {
         multiLine: true
+    })
+}
+
+const copy = () => {
+    let main = S('.main')
+    html2canvas(main,{
+        width:main.clientWidth,
+        height:main.clientHeight
+    }).then(canvas => {
+        let eleLink = document.createElement('a')
+        eleLink.download = 'quadre-maker'
+        eleLink.style.display = 'none'
+        eleLink.href = canvas.toDataURL('image/png')
+        document.body.appendChild(eleLink)
+        eleLink.click()
+        document.body.removeChild(eleLink)
     })
 }
