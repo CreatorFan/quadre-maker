@@ -27,7 +27,7 @@ const setRender = str => {
     needChange.forEach(sel => {
         S(sel).innerText = str.substr(0, 6)
     })
-    S(".pop").innerText = str
+    S(".pop").innerHTML = `<span>${str}<span/>`
     textFit(document.getElementsByClassName('left'), {
         multiLine: true
     })
@@ -35,9 +35,8 @@ const setRender = str => {
 
 const copy = () => {
     let main = S('.main')
-    html2canvas(main,{
-        width:main.clientWidth,
-        height:main.clientHeight
+    html2canvas(main, {
+        scale: 1
     }).then(canvas => {
         let eleLink = document.createElement('a')
         eleLink.download = 'quadre-maker'
@@ -46,5 +45,18 @@ const copy = () => {
         document.body.appendChild(eleLink)
         eleLink.click()
         document.body.removeChild(eleLink)
+    })
+}
+
+const zoom = 0.5
+
+const selfReflectLoop = () => {
+    html2canvas(S('.main')).then(canvas => {
+        S('.pop > *').replaceWith(canvas)
+        S('.pop').style.transform = `scale(${zoom})`
+        let rect = S('.pop').getClientRects()[0]
+        S('.bottom').style.width = `${rect.width}px`
+        S('.bottom').style.height = `${rect.height}px`
+        S('.pop').style.width = `${rect.width/zoom}px`
     })
 }
